@@ -53,7 +53,7 @@ public extension SuperDelegate {
     
     // MARK: UIApplicationDelegate
     
-    public func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         guard let remoteNotificationsCapableSelf = self as? RemoteNotificationCapable else {
             noteImproperAPIUsage("SuperDelegate registered for remote notifications but \(self) does not conform to RemoteNotificationCapable. Ignoring.")
             return
@@ -62,7 +62,7 @@ public extension SuperDelegate {
         remoteNotificationsCapableSelf.didRegisterForRemoteNotifications(withDeviceToken: deviceToken)
     }
     
-    final public func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    final func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         guard let remoteNotificationsCapableSelf = self as? RemoteNotificationCapable else {
             noteImproperAPIUsage("SuperDelegate did fail to register for remote notifications but \(self) does not conform to RemoteNotificationCapable. Ignoring.")
             return
@@ -71,7 +71,7 @@ public extension SuperDelegate {
         remoteNotificationsCapableSelf.didFailToRegisterForRemoteNotifications(withError: error)
     }
     
-    final public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Swift.Void) {
+    final func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Swift.Void) {
         guard let remoteNotificationsCapableSelf = self as? RemoteNotificationCapable else {
             noteImproperAPIUsage("Received remote notification but \(self) does not conform to RemoteNotificationCapable. Ignoring.")
             completionHandler(.noData)
@@ -105,14 +105,14 @@ public extension SuperDelegate {
                                                   fetchCompletionHandler: completionHandler)
     }
     
-    final public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+    final func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         // This method may be called if the application hasn't added "remote-notification" to the UIBackgroundModes array in Info.plist.
         self.application(application, didReceiveRemoteNotification: userInfo, fetchCompletionHandler: { (_) in
             // Nothing to do here.
         })
     }
     
-    final public func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable : Any], completionHandler: @escaping () -> Swift.Void) {
+    final func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable : Any], completionHandler: @escaping () -> Swift.Void) {
         guard let remoteNotificationActionCapableSelf = self as? RemoteNotificationActionCapable else {
             noteImproperAPIUsage("Received local notification action but \(self) does not conform to RemoteNotificationActionCapable. Ignoring.")
             completionHandler()
@@ -129,7 +129,7 @@ public extension SuperDelegate {
         remoteNotificationActionCapableSelf.handleRemoteNotificationAction(withActionIdentifier: identifier, forRemoteNotification: remoteNotification, withResponseInfo: nil, completionHandler: completionHandler)
     }
     
-    final public func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable : Any], withResponseInfo responseInfo: [AnyHashable : Any], completionHandler: @escaping () -> Swift.Void) {
+    final func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable : Any], withResponseInfo responseInfo: [AnyHashable : Any], completionHandler: @escaping () -> Swift.Void) {
         guard let remoteNotificationActionCapableSelf = self as? RemoteNotificationActionCapable else {
             noteImproperAPIUsage("Received local notification action but \(self) does not conform to RemoteNotificationActionCapable. Ignoring.")
             completionHandler()

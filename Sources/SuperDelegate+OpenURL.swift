@@ -86,7 +86,7 @@ extension SuperDelegate {
     
     @objc(application:openURL:options:)
     @available(iOS 9.0, *)
-    final public func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    final public func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         guard let openURLCapableSelf = self as? OpenURLCapable else {
             noteImproperAPIUsage("Received openURL action but \(self) does not conform to OpenURLCapable. Ignoring.")
             return false
@@ -133,9 +133,9 @@ extension SuperDelegate {
 // MARK: – UIApplicationLaunchOptionsKey Extension
 
 
-extension UIApplicationLaunchOptionsKey {
+extension UIApplication.LaunchOptionsKey {
     
     // UIApplicationLaunchOptionsKey.openInPlace can be passed into launchOptions, but the Swift 3 API doesn't acknowledge this. So we add it here manually.
     @available(iOS 9.0, *)
-    public static let openInPlace = UIApplicationLaunchOptionsKey(rawValue: "UIApplicationOpenURLOptionsOpenInPlaceKey")
+    public static let openInPlace = UIApplication.LaunchOptionsKey(rawValue: "UIApplicationOpenURLOptionsOpenInPlaceKey")
 }

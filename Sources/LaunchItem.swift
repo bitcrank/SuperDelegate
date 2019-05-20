@@ -29,7 +29,7 @@ public enum LaunchItem: CustomStringConvertible, Equatable {
     case shortcut(item: UIApplicationShortcutItem)
     case userActivity(item: NSUserActivity)
     case sourceApplication(bundleIdentifier: String)
-    case unknown(launchOptions: [UIApplicationLaunchOptionsKey : Any])
+    case unknown(launchOptions: [UIApplication.LaunchOptionsKey : Any])
     case none
     
     // MARK: Equatable
@@ -63,23 +63,23 @@ public enum LaunchItem: CustomStringConvertible, Equatable {
     
     // MARK: Initialization
     
-    init(launchOptions: [UIApplicationLaunchOptionsKey : Any]?) {
-        if let launchRemoteNotification = RemoteNotification(remoteNotification: launchOptions?[UIApplicationLaunchOptionsKey.remoteNotification] as? [AnyHashable : Any]) {
+    init(launchOptions: [UIApplication.LaunchOptionsKey : Any]?) {
+        if let launchRemoteNotification = RemoteNotification(remoteNotification: launchOptions?[UIApplication.LaunchOptionsKey.remoteNotification] as? [AnyHashable : Any]) {
             self = .remoteNotification(item: launchRemoteNotification)
             
-        } else if let launchLocalNotification = launchOptions?[UIApplicationLaunchOptionsKey.localNotification] as? UILocalNotification {
+        } else if let launchLocalNotification = launchOptions?[UIApplication.LaunchOptionsKey.localNotification] as? UILocalNotification {
             self = .localNotification(item: launchLocalNotification)
             
-        } else if let launchURL = launchOptions?[UIApplicationLaunchOptionsKey.url] as? URL {
-            let sourceApplicationBundleID = launchOptions?[UIApplicationLaunchOptionsKey.sourceApplication] as? String
-            let annotation = launchOptions?[UIApplicationLaunchOptionsKey.annotation]
+        } else if let launchURL = launchOptions?[UIApplication.LaunchOptionsKey.url] as? URL {
+            let sourceApplicationBundleID = launchOptions?[UIApplication.LaunchOptionsKey.sourceApplication] as? String
+            let annotation = launchOptions?[UIApplication.LaunchOptionsKey.annotation]
             
             if #available(iOS 9.0, *) {
                 self = .openURL(item: URLToOpen(
                     url: launchURL,
                     sourceApplicationBundleID: sourceApplicationBundleID,
                     annotation: annotation,
-                    copyBeforeUse: launchOptions?[UIApplicationLaunchOptionsKey.openInPlace] as? Bool ?? false
+                    copyBeforeUse: launchOptions?[UIApplication.LaunchOptionsKey.openInPlace] as? Bool ?? false
                     )
                 )
                 
@@ -93,14 +93,14 @@ public enum LaunchItem: CustomStringConvertible, Equatable {
                 )
             }
             
-        } else if #available(iOS 9.0, *), let launchShortcutItem = launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
+        } else if #available(iOS 9.0, *), let launchShortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
             self = .shortcut(item: launchShortcutItem)
             
-        } else if let userActivityDictionary = launchOptions?[UIApplicationLaunchOptionsKey.userActivityDictionary] as? [UIApplicationLaunchOptionsKey : Any],
-            let launchUserActivity = userActivityDictionary[UIApplicationLaunchOptionsKey.userActivity] as? NSUserActivity {
+        } else if let userActivityDictionary = launchOptions?[UIApplication.LaunchOptionsKey.userActivityDictionary] as? [UIApplication.LaunchOptionsKey : Any],
+            let launchUserActivity = userActivityDictionary[UIApplication.LaunchOptionsKey.userActivity] as? NSUserActivity {
             self = .userActivity(item: launchUserActivity)
             
-        } else if let sourceApplication = launchOptions?[UIApplicationLaunchOptionsKey.sourceApplication] as? String {
+        } else if let sourceApplication = launchOptions?[UIApplication.LaunchOptionsKey.sourceApplication] as? String {
             self = .sourceApplication(bundleIdentifier: sourceApplication)
             
         } else if let launchOptions = launchOptions, !launchOptions.isEmpty {
@@ -138,33 +138,33 @@ public enum LaunchItem: CustomStringConvertible, Equatable {
     // MARK: Public Properties
     
     /// The launch options that were used to construct the enum, for passing into third party APIs.
-    public var launchOptions: [UIApplicationLaunchOptionsKey : Any] {
+    public var launchOptions: [UIApplication.LaunchOptionsKey : Any] {
         switch self {
         case let .remoteNotification(item):
             return [
-                UIApplicationLaunchOptionsKey.remoteNotification  : item.remoteNotificationDictionary
+                UIApplication.LaunchOptionsKey.remoteNotification  : item.remoteNotificationDictionary
             ]
             
         case let .localNotification(item):
             return [
-                UIApplicationLaunchOptionsKey.localNotification : item
+                UIApplication.LaunchOptionsKey.localNotification : item
             ]
             
         case let .openURL(item):
-            var launchOptions: [UIApplicationLaunchOptionsKey : Any] = [
-                UIApplicationLaunchOptionsKey.url : item.url
+            var launchOptions: [UIApplication.LaunchOptionsKey : Any] = [
+                UIApplication.LaunchOptionsKey.url : item.url
             ]
             
             if let sourceApplicationBundleID = item.sourceApplicationBundleID {
-                launchOptions[UIApplicationLaunchOptionsKey.sourceApplication] = sourceApplicationBundleID
+                launchOptions[UIApplication.LaunchOptionsKey.sourceApplication] = sourceApplicationBundleID
             }
             
             if let annotation = item.annotation {
-                launchOptions[UIApplicationLaunchOptionsKey.annotation] = annotation
+                launchOptions[UIApplication.LaunchOptionsKey.annotation] = annotation
             }
             
             if #available(iOS 9.0, *) {
-                launchOptions[UIApplicationLaunchOptionsKey.openInPlace] = item.copyBeforeUse
+                launchOptions[UIApplication.LaunchOptionsKey.openInPlace] = item.copyBeforeUse
             }
             
             return launchOptions
@@ -172,7 +172,7 @@ public enum LaunchItem: CustomStringConvertible, Equatable {
         case let .shortcut(item):
             if #available(iOS 9.0, *) {
                 return [
-                    UIApplicationLaunchOptionsKey.shortcutItem : item
+                    UIApplication.LaunchOptionsKey.shortcutItem : item
                 ]
             } else {
                 // If we are a .shortcut and we are not on iOS 9 or later, something absolutely terrible has happened.
@@ -181,15 +181,15 @@ public enum LaunchItem: CustomStringConvertible, Equatable {
             
         case let .userActivity(item):
             return [
-                UIApplicationLaunchOptionsKey.userActivityDictionary : [
-                    UIApplicationLaunchOptionsKey.userActivityType : item.activityType,
-                    UIApplicationLaunchOptionsKey.userActivity : item
+                UIApplication.LaunchOptionsKey.userActivityDictionary : [
+                    UIApplication.LaunchOptionsKey.userActivityType : item.activityType,
+                    UIApplication.LaunchOptionsKey.userActivity : item
                 ]
             ]
             
         case let .sourceApplication(item):
             return [
-                UIApplicationLaunchOptionsKey.sourceApplication : item
+                UIApplication.LaunchOptionsKey.sourceApplication : item
             ]
             
         case let .unknown(launchOptions):

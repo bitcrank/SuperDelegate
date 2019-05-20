@@ -69,8 +69,8 @@ extension SuperDelegate {
 // MARK: – UIApplicationLaunchOptionsKey Extension
 
 
-extension UIApplicationLaunchOptionsKey {
+extension UIApplication.LaunchOptionsKey {
     
     // UIApplicationLaunchOptionsKey.userActivity is passed into launchOptions, but the API doesn't acknowledge this. So we add it here manually.
-    public static let userActivity = UIApplicationLaunchOptionsKey(rawValue: "UIApplicationLaunchOptionsUserActivityKey")
+    public static let userActivity = UIApplication.LaunchOptionsKey(rawValue: "UIApplicationLaunchOptionsUserActivityKey")
 }

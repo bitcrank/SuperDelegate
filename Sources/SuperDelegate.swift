@@ -67,7 +67,7 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
     private var couldHandleURLInWillFinishLaunching = true
     private var couldHandleUserActivityInWillFinishLaunching = true
     
-    final public func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+    final public func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         guard self is ApplicationLaunched else {
             noteImproperAPIUsage("\(self) must conform to ApplicationLaunched protocol")
             return false
@@ -77,10 +77,10 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
         requestUserNotificationPermissionsIfPreviouslyRegistered()
         
         // Use notification listeners to respond to application lifecycle events to subclasses can override the default hooks.
-        applicationDidBecomeActiveListener = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: application, queue: OperationQueue.main) { [weak self] _ in
+        applicationDidBecomeActiveListener = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: application, queue: OperationQueue.main) { [weak self] _ in
             self?.applicationIsInForeground = true
         }
-        applicationDidEnterBackgroundListener = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: application, queue: OperationQueue.main) { [weak self] _ in
+        applicationDidEnterBackgroundListener = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: application, queue: OperationQueue.main) { [weak self] _ in
             self?.applicationIsInForeground = false
         }
         
@@ -146,7 +146,7 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
             && !handledShortcutInWillFinishLaunching
     }
     
-    final public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
+    final public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         guard self is ApplicationLaunched else {
             noteImproperAPIUsage("\(self) must conform to ApplicationLaunched protocol")
             return false
@@ -156,7 +156,7 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
             application.registerForRemoteNotifications()
         }
         
-        if let launchBluetoothPeripheralIdentifiers = launchOptions?[UIApplicationLaunchOptionsKey.bluetoothPeripherals] as? [String] {
+        if let launchBluetoothPeripheralIdentifiers = launchOptions?[UIApplication.LaunchOptionsKey.bluetoothPeripherals] as? [String] {
             guard let backgroundBluetoothPeripheralCapableSelf = self as? BackgroundBluetoothPeripheralCapable else {
                 noteImproperAPIUsage("Received background bluetooth peripheral restore identifier but \(self) does not conform to BackgroundBluetoothPeripheralCapable. Failing to launch app.")
                 return false
@@ -165,7 +165,7 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
             backgroundBluetoothPeripheralCapableSelf.restoreBluetoothPeripheralManagers(withIdentifiers: launchBluetoothPeripheralIdentifiers)
         }
         
-        if let launchBluetoothCentralIdentifiers = launchOptions?[UIApplicationLaunchOptionsKey.bluetoothCentrals] as? [String] {
+        if let launchBluetoothCentralIdentifiers = launchOptions?[UIApplication.LaunchOptionsKey.bluetoothCentrals] as? [String] {
             guard let backgroundBluetoothCentralCapableSelf = self as? BackgroundBluetoothCentralCapable else {
                 noteImproperAPIUsage("Received background bluetooth peripheral restore identifier but \(self) does not conform to BackgroundBluetoothCentralCapable. Failing to launch app.")
                 return false
@@ -174,7 +174,7 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
             backgroundBluetoothCentralCapableSelf.restoreBluetoothCentralManagers(withIdentifiers: launchBluetoothCentralIdentifiers)
         }
         
-        if let launchDueToLocationEvent = launchOptions?[UIApplicationLaunchOptionsKey.location] as? Bool, launchDueToLocationEvent {
+        if let launchDueToLocationEvent = launchOptions?[UIApplication.LaunchOptionsKey.location] as? Bool, launchDueToLocationEvent {
             guard let locationEventCapableSelf = self as? LocationEventCapable else {
                 noteImproperAPIUsage("Launched due to location event but \(self) does not conform to LocationEventCapable. Failing to launch app.")
                 return false
@@ -225,7 +225,7 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
         loadInterfaceOnce(with: launchItem)
         
         // Now that we've loaded the interface with our launch item, set up our willEnterForegroundListener
-        applicationWillEnterForegroundListener = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: application, queue: OperationQueue.main) { [weak self] _ in
+        applicationWillEnterForegroundListener = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: application, queue: OperationQueue.main) { [weak self] _ in
             guard let weakSelf = self else {
                 return
             }
