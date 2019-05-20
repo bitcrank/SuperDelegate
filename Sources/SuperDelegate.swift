@@ -77,10 +77,10 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
         requestUserNotificationPermissionsIfPreviouslyRegistered()
         
         // Use notification listeners to respond to application lifecycle events to subclasses can override the default hooks.
-        applicationDidBecomeActiveListener = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: application, queue: OperationQueue.main) { [weak self] _ in
+        applicationDidBecomeActiveListener = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidBecomeActive, object: application, queue: OperationQueue.main) { [weak self] _ in
             self?.applicationIsInForeground = true
         }
-        applicationDidEnterBackgroundListener = NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: application, queue: OperationQueue.main) { [weak self] _ in
+        applicationDidEnterBackgroundListener = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: application, queue: OperationQueue.main) { [weak self] _ in
             self?.applicationIsInForeground = false
         }
         
@@ -225,7 +225,7 @@ open class SuperDelegate: NSObject, UIApplicationDelegate {
         loadInterfaceOnce(with: launchItem)
         
         // Now that we've loaded the interface with our launch item, set up our willEnterForegroundListener
-        applicationWillEnterForegroundListener = NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: application, queue: OperationQueue.main) { [weak self] _ in
+        applicationWillEnterForegroundListener = NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillEnterForeground, object: application, queue: OperationQueue.main) { [weak self] _ in
             guard let weakSelf = self else {
                 return
             }
