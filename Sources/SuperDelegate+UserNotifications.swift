@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 // MARK: UserNotificationCapable – Opting into this protocol gives your app the ability to register for User Notifications. Adopt RemoteNotification or LocalNotification to actually receive notifications.

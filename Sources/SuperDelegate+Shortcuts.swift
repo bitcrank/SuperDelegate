@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 // MARK: ShortcutCapable – Opting into this protocol gives your app the ability to handle force-press shortcuts from the home screen.

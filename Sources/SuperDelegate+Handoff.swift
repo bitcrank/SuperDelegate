@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 // MARK: - HandoffCapable – Opting into this protocl gives your app the ability to handle Handoff events.

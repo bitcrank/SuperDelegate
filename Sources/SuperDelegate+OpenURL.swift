@@ -20,6 +20,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 // MARK: - OpenURLCapable – Opting into this protocl gives your app the ability to handle UserActivity handoff events.

@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 // MARK: - UserActivityCapable – Opting into this protocl gives your app the ability to handle UserActivity (Spotlight and Associated Domain) events.

@@ -20,6 +20,7 @@
 
 import Foundation
 import UserNotifications
+import UIKit
 
 
 // MARK: LocalNotificationCapable – Opting into this protocol gives your app the ability to process local notifications.

@@ -19,6 +19,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 // MARK: WatchKitCapable – Opting into this protocl gives your app the ability to handle WatchKit extension requests.
