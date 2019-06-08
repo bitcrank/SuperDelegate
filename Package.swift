@@ -1,3 +1,5 @@
+// swift-tools-version:4.0
+
 //
 //  Package.swift
 //  SuperDelegate
@@ -21,5 +23,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "SuperDelegate"
+    name: "SuperDelegate",
+    products: [
+        .library(name: "SuperDelegate", targets: ["SuperDelegate"])
+    ],
+    targets:[
+        .target(name: "SuperDelegate", dependencies: [], path: "Sources"),
+        .testTarget(name: "SuperDelegateTests", dependencies: ["SuperDelegate"], path: "Tests")
+    ]
 )
